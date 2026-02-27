@@ -1,0 +1,344 @@
+{
+  "name": "n8n_1_LLM",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Formulario QA",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "email"
+            },
+            {
+              "fieldLabel": "Question"
+            },
+            {
+              "fieldLabel": "Answer",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -48,
+        48
+      ],
+      "id": "4f97f58d-794a-4f51-8b78-d82969510a3a",
+      "name": "On form submission",
+      "webhookId": "42da618d-f909-494f-a147-6cc10e63f99b"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2997e02c-087a-452e-b3e1-5fe87cc0798a",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "gmail",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        48
+      ],
+      "id": "3540adfd-75c3-4fa9-81dc-48dee7c644e4",
+      "name": "Correo electronico valido?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d360929c-3db0-4d1c-9a0d-7e001c379489",
+              "name": "Confianza",
+              "value": false,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        368,
+        144
+      ],
+      "id": "4a216a27-0546-475a-b6c7-65c8a5b9a85b",
+      "name": "Falso confianza"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d360929c-3db0-4d1c-9a0d-7e001c379489",
+              "name": "Confianza",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        368,
+        -80
+      ],
+      "id": "3603e0fc-ee64-4039-9367-64c9c88e02cd",
+      "name": "True confianza"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        560,
+        48
+      ],
+      "id": "aeaf7499-2607-41db-ae02-4dc6fc5ec2bf",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        224
+      ],
+      "id": "fc2addd1-8150-4321-aa10-8ba90a43401c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Y9KKQYNheFZLbw56",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "cHQZb579C5GoA9a7",
+          "mode": "list",
+          "cachedResultName": "Data",
+          "cachedResultUrl": "/projects/qU7obuvS2sqWBJLF/datatables/cHQZb579C5GoA9a7"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $('On form submission').item.json.Name }}",
+            "pregunta": "={{ $('On form submission').item.json.Question }}",
+            "email": "={{ $('On form submission').item.json.email }}",
+            "respuesta_modelo": "={{ $json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "pregunta",
+              "displayName": "pregunta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "respuesta_modelo",
+              "displayName": "respuesta_modelo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1072,
+        48
+      ],
+      "id": "3d2767f9-f0b1-496a-83f0-d8ad212e6595",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Revisa la pregunta y evalua la respuesta, adicional da una mejor respuesta\npregunta:  {{ $json.Question }}\nresupuesta: {{ $json.Answer }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        720,
+        48
+      ],
+      "id": "b8d19b92-f023-44bb-9050-77c4a41bd210",
+      "name": "Basic LLM Chain"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Correo electronico valido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correo electronico valido?": {
+      "main": [
+        [
+          {
+            "node": "True confianza",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Falso confianza",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "True confianza": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Falso confianza": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2af023b5-6ccc-4af2-9a71-1ba4827ffd81",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e4c056d5863e77160e919617ee15bd0eac65b959ac636d7884177bd210a009a9"
+  },
+  "id": "vgOlmWPfuRwPlnXf",
+  "tags": []
+}
