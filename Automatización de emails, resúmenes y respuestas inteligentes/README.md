@@ -7,6 +7,8 @@ Más que solo ChatGPT: aquí encontrarás integraciones con **Claude, Gemini, De
 
 ## 📚 Contenido
 
+![alt text](<Captura de pantalla 2026-02-28 001257.png>)
+
 ### Flujo de Trabajo Principal (según el diagrama)
 
 El sistema automatizado se organiza en cuatro bloques principales:
