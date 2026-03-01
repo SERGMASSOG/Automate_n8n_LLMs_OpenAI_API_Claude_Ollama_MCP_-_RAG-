@@ -1,0 +1,250 @@
+{
+  "name": "AI Agent Node, Vector Database, Embeddings & More",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "129f54c5-3dac-42fa-b65f-aca8311d9172",
+      "name": "When chat message received",
+      "webhookId": "3b71aee6-6f1a-4c26-8824-dd1b70a14ab5"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Eres un asistente de IA especializado en analizar los informes financieros trimestrales de Tesla. Tu tarea principal es responder preguntas de manera precisa y exacta utilizando la base de datos vectorial, que contiene documentos relevantes (informes del tercer y cuarto trimestre).\n\nSolo proporciona información que recuperes de los documentos (o conocimiento experto verificado). Si algo no está incluido en el conjunto de datos o no está claro, indica claramente que no tienes suficiente información.\n\nEstructura de tus respuestas: • Concisas y directas al punto • Números y hechos específicos, cuando estén disponibles • Indica claramente de qué informe trimestral (tercer o cuarto trimestre) proviene la información\n\nObjetivo: Proporcionar a los usuarios información confiable y rápida sobre las finanzas trimestrales de Tesla sin detalles innecesarios.Eres un asistente de IA especializado en analizar los informes financieros trimestrales de Tesla. Tu tarea principal es responder preguntas de manera precisa y exacta utilizando la base de datos vectorial, que contiene documentos relevantes (informes del tercer y cuarto trimestre).\n\nSolo proporciona información que recuperes de los documentos (o conocimiento experto verificado). Si algo no está incluido en el conjunto de datos o no está claro, indica claramente que no tienes suficiente información.\n\nEstructura de tus respuestas: • Concisas y directas al punto • Números y hechos específicos, cuando estén disponibles • Indica claramente de qué informe trimestral (tercer o cuarto trimestre) proviene la información"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "0c5d3d48-c370-4bab-8adf-52aeeaa86857",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        208
+      ],
+      "id": "577acb69-23c9-44b0-8183-f300aa607026",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Y9KKQYNheFZLbw56",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "6fc61ebb-1ee2-4694-81e1-a2a78da6d34c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8ncoursedata",
+          "mode": "list",
+          "cachedResultName": "n8ncoursedata"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        336
+      ],
+      "id": "07c3749a-69cf-47f0-a849-c39d10da8939",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "bBvYvTvALQ8oj7Im",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 512
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        480
+      ],
+      "id": "599e336c-3a11-4d42-87ae-cc06a580e3c1",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Y9KKQYNheFZLbw56",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        352
+      ],
+      "id": "1789eb73-e5fe-4b75-8e8c-2be79cd88e35",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Y9KKQYNheFZLbw56",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "topK": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        336,
+        192
+      ],
+      "id": "f2b7b172-f538-4ad3-b2d0-a0d78e67a028",
+      "name": "Answer questions with a vector store"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "3e9052cb-3bc5-4f18-975b-849c3f49afd9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e4c056d5863e77160e919617ee15bd0eac65b959ac636d7884177bd210a009a9"
+  },
+  "id": "9xwHMeyI17tWUWN6",
+  "tags": []
+}
